@@ -89,6 +89,39 @@ elif opc == 4:
     nome_do_arquivo = input("Digite o nome do arquivo que deseja apagar: ")
     os.remove(nome_do_arquivo)
     print("Arquivo excluido com sucesso!")
+    
+    #if para caso n encontre o arquivo
 
+
+elif opc == 5:
+    nome_de_arquivo = input("Informe o nome da festa que voce quer adicionar um item:")
+    try:
+        with open(nome_de_arquivo, 'r') as arquivo:
+            linhas = arquivo.readlines()
+        
+        for i, linha in enumerate(linhas):    #enumerate vai guardar a linha em que o orcamento esta para uso futuro
+            if linha.startswith("Orçamento:"):
+                orcamento_atual = float(linha.split(":")[1].strip())  #split vai dividar o ORCAMENTO e o VALOR e o strip tira espacos em branco
+                indice_orcamento = i
+                break
+        else:
+            print("Voce nao tem orcamento restante.")
+            exit()
+        
+        item = input("Digite o nome do item")
+        valor = float(input("Digite o custo do item"))
+
+        novo_orcamento = orcamento_atual - valor
+        linhas[indice_orcamento] = f"Orcamento: {novo_orcamento}\n"
+
+        linhas.append(f"- {item}: R$ {valor}\n")
+
+        with open(nome_de_arquivo, "w") as arquivo:
+            arquivo.writelines(linhas)
+
+        print(f"Item {item} adicionado com sucesso! Novo orcamento: R${novo_orcamento:.2f}")
+
+    except FileNotFoundError:
+        print("Nao foi possivel encontrar o arquivo.")
 else:
-    print("Arquivo nao encontrado")
+    print("Opca invalida.")
