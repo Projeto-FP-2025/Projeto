@@ -1,9 +1,14 @@
-#orcamento - A qauntidade de dinheiro que o usurio pode pagar para contratar o evento
-#orcamento_atual - o orçamento que a pessoa tem agr
-# orcamento_final - vai mostrar no final dos orçamentos para saber se a pessoa vai querer contrar
-#orcamento_total - o orçamento de todas as sugestoes
+import os
+from datetime import datetime
+import time
 
 def sugestao(tipo_de_evento,num_de_convidados):
+    print("\nGerando sugestões pra o evento",end="")
+    
+    time.sleep(1)
+    
+    print("\n")
+
     orcamento_total = 0
 
     sugestoes = f"\n=-=-=-= Sugestões para {tipo} =-=-=-=\n"
@@ -99,8 +104,6 @@ def sem_sugestao(opc):
     elif opc == 3:
         return "Pacote VIP (R$ 2500)", 2500
 
-import os
-from datetime import datetime
 
 print("[1] Adicionar um novo evento")
 print("[2] Visualizar um evento")
