@@ -1,315 +1,315 @@
-import os
-from datetime import datetime
-import time
-
-def sugestao(tipo_de_evento,num_de_convidados):
-    print("\nGerando sugestões pra o evento",end="")
-    
-    time.sleep(1)
-    
-    print("\n")
-
+## Função para sugerir detalhes do evento com base no tipo e número de convidados ##
+def sugestao(tipoEvento, convidados):
     orcamento_total = 0
+    t = tipoEvento.lower()
 
-    sugestoes = f"\n=-=-=-= Sugestões para {tipo} =-=-=-=\n"
+    sugestoes = f"\nSugestões para o seu evento de {tipoEvento} com {convidados} convidados:\n"
 
-    if tipo_de_evento == "casamento":
-
-        preco_por_pessoa = 70
-        total_do_buffet = preco_por_pessoa * num_de_convidados
-        sugestoes += f"\nBuffet para casamanto R${preco_por_pessoa} por pessoa"
-        sugestoes += f"\nTotal do buffet para {num_de_convidados} convidados: R${total_do_buffet}"
-
+    if t == "casamento":
+        sugestoes += f"\nBuffet de casamanto R$70 por pessoa"
+        orcamento_total += 70 * convidados
         sugestoes += "\nCARDÁPIO:\nMassa: Fettuccine, Penne, Raviole\nProteína: Carne, Peixe, Ave\nSobremessas: Petit gateau, Crème Brûlée, Macaron"
-        orcamento_total += total_do_buffet
-        
-        
-        sugestoes += "\nDecoração: flores (cor à sua preferencia), iluminação suave, velas, serviço à americana e uma mesa para os familiares dos noivos"
+        sugestoes += "\nDECORAÇÃO: flores (cor à sua preferencia), iluminação suave, velas, serviço à americana e uma mesa para os familiares dos noivos (R$4000)"
         orcamento_total += 4000
-
-        sugestoes += "\nCabine de fotos, Um Violinista (Para a Cerimônia), Banda ao vivo e DJ (Para a Festa)"
+        sugestoes += "\nMUSICA: Um Violinista (Para a Cerimônia), Banda ao vivo e DJ (Para a Festa) (R$1500)"
         orcamento_total += 1500
-
-
-        sugestoes += "\nFotógrafo Profissional"
+        sugestoes += "\nFOTOS:Fotógrafo Profissional (Com cabine de fotos) (R$1200)"
         orcamento_total += 1200
+        return sugestoes, orcamento_total
 
-    
-    elif tipo_de_evento == "aniversário":
-        festa = input("O aniversário é para criança ou adulto: ").lower()
-        preco_por_pessoa = 30
-        total_do_buffet = preco_por_pessoa * num_de_convidados
-
-        sugestoes += f"\nBuffet R${preco_por_pessoa} por pessoa"
-        sugestoes += f"\nTotal do Buffet: R${total_do_buffet}"
-        orcamento_total += total_do_buffet
-
-        if festa == "criança":
-            sugestoes += "\CARDÁPIO:\nSalgados: Coxinha, Bolinha de Queijo, Enroladinho de Salsicha\nDoces: Brigadeiro, Beijinho, Surpresa de Uva\nBebidas: Água, Refrigerantes, Sucos\nLanches: Mini pizzas, Mini hamburguer, Cachorro Quente"
-            orcamento_total += 2000
-
-            sugestoes += "\nDecoração infantil: Balões, Painiés temáticos"
+    elif t == "aniversário":
+        idade = input("O aniversário é para criança ou adulto: ").lower()
+        sugestoes += f"\nBuffet de aniversário R$30 por pessoa"
+        orcamento_total += 30 * convidados
+        if idade == "criança":
+            sugestoes += "\nCARDÁPIO:\nSalgados: Coxinha, Bolinha de Queijo, Enroladinho de Salsicha\nDoces: Brigadeiro, Beijinho, Surpresa de Uva\nBebidas: Água, Refrigerantes, Sucos\nLanches: Mini pizzas, Mini hamburguer, Cachorro Quente"
+            sugestoes += "\nDECORAÇÃO infantil: Balões, Painiés temáticos (R$1500)"
             orcamento_total += 1500
-
-            sugestoes += "\nBrincadeira: Brinquedos, Mágico"
+            sugestoes += "\nBRINCADEIRAS: Brinquedos, Mágico (R$1500)"
             orcamento_total += 1500
-            
-            sugestoes += "\nLancherinha com o tema estampado"
+            sugestoes += "\nLEMBRANCINHAS: Lancherinha com o tema estampado (R$500)"
             orcamento_total += 500
-
             return sugestoes, orcamento_total
-
-        elif festa == "adulto":
-            sugestoes += "\CARDÁPIO:\nEntrada: Tábua Simples, Amendoin, Torradinhas com patês\nSalgados: coxinha, Kibe, Risoles\nPrato Quente: Strogonoff, Massas\nBebidas: Refrigerante, Água, Destilados"
-            orcamento_total += 2000
-
-            sugestoes += "\nDecoração Elegante"
+        elif idade == "adulto":
+            sugestoes += "\nCARDÁPIO:\nEntrada: Tábua Simples, Amendoin, Torradinhas com patês\nSalgados: coxinha, Kibe, Risoles\nPrato Quente: Strogonoff, Massas\nBebidas: Refrigerante, Água, Destilados"
+            sugestoes += "\nDECORAÇÃO: Elegante (R$1000)"
             orcamento_total += 1000
-
-            sugestoes += "\nMúsica Ao vivo"
+            sugestoes += "\nMÚSICA: Ao vivo (R$600)"
             orcamento_total += 600
-
             return sugestoes, orcamento_total
 
-    elif tipo_de_evento == "reunião":
-        preco_por_pessoa = 30
-        total_do_buffet = preco_por_pessoa * num_de_convidados
-
-        sugestoes += f"\nBuffet R${preco_por_pessoa} por pessoa"
-        sugestoes += f"\nTotal do Buffet R${total_do_buffet}"
-        orcamento_total += total_do_buffet
-
-        sugestoes += "\CARDÁPIO:\nBebidas: Café, Suco Natural, Água\nSalgados: Sanduíches Naturais, Pão de Queijo, Folhados\nDoces: Bolo, Biscoitos, Frutas"
+    elif t == "reunião":
+        sugestoes += f"\nBuffet R$30 por pessoa"
+        orcamento_total += 30 * convidados
+        sugestoes += "\nCARDÁPIO:\nBebidas: Café, Suco Natural, Água\nSalgados: Sanduíches Naturais, Pão de Queijo, Folhados\nDoces: Bolo, Biscoitos, Frutas"
+        sugestoes += "\nDECORAÇÃO: Mesas com toalhas, Flores de mesa, Guardanapos, Jarras e Pratos (R$500)"
         orcamento_total += 500
-
-        sugestoes += "\nDecoração: Mesas com toalhas, Flores de mesa, Guardanapos, Jarras e Pratos"
-        orcamento_total += 500
-
-    return sugestoes, orcamento_total
+        return sugestoes, orcamento_total
     
-def sem_sugestao(opc):
+    elif t == "churrasco":
+        sugestoes += f"\nChurrasco R$50 por pessoa"
+        orcamento_total += 50 * convidados
+        sugestoes += "\nCARDÁPIO:\nCarnes: Picanha, Fraldinha, Linguiça, Frango\nAcompanhamentos: Arroz, Farofa, Vinagrete, Salada\nBebidas: Cerveja, Refrigerante, Água"
+        sugestoes += "\nDECORAÇÃO: Toalhas de mesa xadrez, guardanapos coloridos, pratos e copos descartáveis (R$800)"
+        orcamento_total += 800
+        sugestoes += "\nMÚSICA: Playlist personalizada ou DJ (R$400)"
+        orcamento_total += 400
+        return sugestoes, orcamento_total
+    
+    elif t == "batizado":
+        sugestoes += f"\nBuffet R$40 por pessoa"
+        orcamento_total += 40 * convidados
+        sugestoes += "\nCARDÁPIO:\nEntradas: Canapés, Salgadinhos finos\nPrato Principal: Frango ao molho, Massas\nSobremesas: Mini tortas, Docinhos variados\nBebidas: Sucos, Refrigerantes, Água"
+        sugestoes += "\nDECORAÇÃO: Cores suaves, Flores delicadas, Itens religiosos (R$1200)"
+        orcamento_total += 1200
+        sugestoes += "\nMÚSICA: Música ambiente suave (R$300)"
+        orcamento_total += 300
+        return sugestoes, orcamento_total
+    
+    elif t == "formatura":
+        sugestoes += f"\nBuffet R$60 por pessoa"
+        orcamento_total += 60 * convidados
+        sugestoes += "\nCARDÁPIO:\nEntradas: Tábua de frios, Salgadinhos variados\nPrato Principal: Carnes nobres, Massas finas\nSobremesas: Doces gourmet, Bolo temático\nBebidas: Coquetéis, Refrigerantes, Água"
+        sugestoes += "\nDECORAÇÃO: Tema sofisticado, Iluminação especial, Arranjos florais (R$2000)"
+        orcamento_total += 2000
+        sugestoes += "\nMÚSICA: Banda ao vivo e DJ (R$1500)"
+        orcamento_total += 1500
+        return sugestoes, orcamento_total
+## Função para escolher pacote sem sugestão ##    
+def semSugestao():
     print("Escolha o Pacote:")
     print("[1] Pacote Básico (R$ 1000)")
-    print("[2] Pacote Completo (R$ 1500)")
-    print("[3] Pacote VIP (R$ 2500)")
-
-    opc = int(input("Digite o número do pacote desejado: "))
-
-    if opc == 1:
+    print("[2] Pacote Completo (R$ 5000)")
+    print("[3] Pacote VIP (R$ 10000)")
+    try:
+        pacote = int(input("Digite o número do pacote desejado: "))
+    except ValueError:
+        print("Por favor, digite um número válido.")
+        return "Pacote inválido. Por favor, escolha uma opção válida.", 0
+    if pacote == 1:
         return "Pacote Básico (R$ 1000)", 1000
     
-    elif opc == 2:
-        return "Pacote Completo (R$ 1500)", 1500
+    elif pacote == 2:
+        return "Pacote Completo (R$ 5000)", 5000
     
-    elif opc == 3:
-        return "Pacote VIP (R$ 2500)", 2500
-
-
-print("[1] Adicionar um novo evento")
-print("[2] Visualizar um evento")
-print("[3] Editar um evento")
-print("[4] Excluir um evento")
-print("[5] Adicionar um item a um evento")
-
-print("="*20)
-opc = int(input("digite uma opção: "))
-print("="*20)
-
-if opc == 1:
-    nome_do_arquivo = input("Digite o nome do arquivo(colocar .txt): ")
-    with open(nome_do_arquivo, 'a',encoding='utf8') as arquivo:
-        tipo = input("Digite o tipo do evento: ").lower()
-        arquivo.write("1- Tipo do Evento: " + tipo + '\n')
-
-        data = input("Digite a data do evento (dd/mm/aaaa): ")
-        arquivo.write("2- Data do Evento: "+ data + '\n')
-
-        local = input("Digite o local do evento: ")
-        arquivo.write("3- Local do Evento: "+ local + '\n')
-
-        orcamento = int(input("Digite o orçamento do evento: "))
-        arquivo.write("4- Orçamento do Evento: " + str(orcamento) + '\n')
-
-        if orcamento < 1000:
-            print("O valor mínimo para contratar um evento é de R$1000")
-            exit()
-    
-    num_de_convidados = int(input("Digite a quantidade de convidados: "))
-    suges, orcamento_total = sugestao(tipo,num_de_convidados)
-
-    print(suges)
-
-    if orcamento > orcamento_total:
-            with open (nome_do_arquivo,'a',encoding='utf8') as arquivo:
-                print(f"Valor para pagar: R${orcamento_total}")
-                arquivo.write(f"5- Valor pra pagar: {orcamento_total}\n")
-
-                valor_final = orcamento - orcamento_total
-                arquivo.write(f"6- O orçamento Restante é: {valor_final}\n")
-                print(f"O orçamento Restante é R${valor_final}")
-
+    elif pacote == 3:
+        return "Pacote VIP (R$ 10000)", 10000
     else:
-        falta = orcamento_total - orcamento
-        print(f"O seu orçamento ainda não é o sufuciente")
-        print(f"o total da festa é R${orcamento_total}")
-        print(f"Faltam R${falta}")
-        print("Não foi possível salvar o evento")
-        exit()
-
-    querer = input("Deseja usar essas sugestões? [Sim/Não]: ").lower()
-
-    if querer == "sim":
-        with open (nome_do_arquivo,'a',encoding='utf8') as arquivo:
-            arquivo .write("=-=-=-= Sugestão Escolhida: =-=-=-=\n")
-            arquivo.write(suges + '\n')
-            print("evento cadastrada com sucesso!")
-
-
-    elif querer == "não":
-        texto, valor = sem_sugestao(opc)
-        print(texto)
-
-        with open (nome_do_arquivo,'a',encoding='utf8') as arquivo:
-            diferenca = orcamento - valor
-            if diferenca >= 0:
-                print(f"\n=-=-=-= Evento {texto} Contratado =-=-=-=\n")
-                print(f"Sobraram R${diferenca}")
-
-                arquivo.write(f"\n=-=-=-= Evento {texto} Contratado =-=-=-=\n")
-                arquivo.write(f"Sobraram R${diferenca}")
-
-            else:
-                print("Não foi possível contrar o Pacote para o evento")
-                print(f"Faltam R${abs(diferenca)} para contratar o evento")
-
-                arquivo.write("Não foi possível contrar o Pacote para o evento")
-                arquivo.write(f"Faltam R${abs(diferenca)} para contratar o evento\n")
-
-elif opc == 2:
-    nome_do_arquivo = input("Qual arquivo vc quer visualizar: ")
+        return "Pacote inválido. Por favor, escolha uma opção válida.", 0
+## importando bibliotecas ##
+import os
+from datetime import datetime
+## menu de operações ##
+while True:
+    print("=" * 40)
+    print("\tOrganiza Festa\t")
+    print("=" * 40)
+    print("[1] - Adicionar novo evento")
+    print("[2] - Visualizar um evento")
+    print("[3] - Editar um evento")
+    print("[4] - Excluir evento")
+    print("[0] - Sair")
+    print("=" * 40)
     try:
-        with open(nome_do_arquivo,'r',encoding='utf8') as arquivo:
-            linha_tipo = arquivo.readline().strip()
-            tipo = linha_tipo.split(": ",1)[1]
-
-            linha_data = arquivo.readline().strip()
-            data = linha_data.split(": ",1)[1]
-
-            linha_local = arquivo.readline().strip()
-            local = linha_local.split(": ",1)[1]
-
-            linha_orcamento = arquivo.readline().strip()
-            orcamento = float(linha_orcamento.split(": ",1)[1])
-
-            print(f"Tipo de Evento: {tipo}")
-            print(f"Data do Evento: {data}")
-            print(f"Local do Evento: {local}")
-            print(f"Orçamento do Evento: {orcamento}")
-
-            from datetime import date
-
-            dia,mes,ano = map(int,data.split("/"))
-            dia_do_evento = date(ano,mes,dia)
-
-            hoje = date.today()
-
-            restam = (dia_do_evento - hoje).days
-
-        with open (nome_do_arquivo,'a',encoding='utf8') as arquivo: # perguntar se quer salvar no arquivo ou so quando pedir para visualizar a fesgta
-            if restam > 0:
-                print(f"Faltam {restam} dias para o evento")
-                
-
-            elif restam == 0:
-                print(f"O evento é Hoje")
-                
-            
+        operacao = int(input("Escolha a operação a ser realizada: "))
+    except ValueError:
+        print("Por favor, digite um número válido.")
+        continue
+    print("=" * 40)
+## Adicionar novo evento ##
+    if operacao == 1:
+        nomeArquivo = input("Digite o nome do evento(sem espaços): ") + ".txt"
+        ## coletando dados do evento ##
+        with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+            tipo = input("Digite o tipo do evento: ").lower()
+            arquivo.write("Tipo do evento: " + tipo + "\n")
+            data = input("Digite a data do evento (DD/MM/AAAA): ") 
+            arquivo.write("Data do evento: " + data + "\n")
+            local = input("Digite o local do evento: ")
+            arquivo.write("Local do evento: " + local + "\n")
+            convidados = int(input("Digite o número de convidados: "))
+            arquivo.write("Número de convidados: " + str(convidados) + "\n")
+            orcamento = input("Digite o orçamento do evento: R$ ")
+            arquivo.write("Orçamento inicial do evento: R$ " + orcamento + "\n")
+            try:
+                orcamento = float(orcamento)
+            except ValueError:
+                print("Por favor, digite um valor numérico válido para o orçamento.")
+                continue
+            ## verificando orçamento mínimo ##
+            if orcamento < 1000:
+                print("\nO valor mínimo para contratar um evento é de R$1000")
+                continue
+        ## sugerindo pacotes ##
+        validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
+        if tipo.lower() not in validos:
+            pacote, valor = semSugestao()
+            print(pacote)
+            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                diferenca = orcamento - valor
+                if diferenca >= 0:
+                    print(f"\n====== Evento {pacote} Contratado ======n")
+                    print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+                    arquivo.write(f"====== Evento {pacote} Contratado ======\n")
+                    arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
+                else:
+                    print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
+                    arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
+                    continue
+            ## sugerindo detalhes do evento ##
+        else:
+            suges, orcamento_total = sugestao(tipo, convidados)
+            print(suges)
+            if orcamento > orcamento_total:
+                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                    print(f"\nOrçamento final: R$ {orcamento_total}")
+                    arquivo.write(f"Orçamento final: R$ {orcamento_total}\n")
+                    valor_final = orcamento - orcamento_total
+                    print(f"Você terá um saldo restante de R$ {valor_final} após contratar os serviços sugeridos.")
+                    arquivo.write(f"Saldo restante após contratar os serviços sugeridos: R$ {valor_final}\n")
             else:
-                print(f"O evento ja passou há {-restam} dias")
-                    
-    except FileNotFoundError:
-        print("arquivo não encontrado.")
+                falta = orcamento_total - orcamento
+                print(f"\nSeu orçamento não cobre todas as sugestões. Faltam R$ {falta} para contratar todos os serviços sugeridos.")
+                print("Não foi possível adicionar o evento.")
+                continue
 
-elif opc == 3:
-    try:
-        nome_do_arquivo = input("Qual arquivo vc quer editar: ")
-        with open(nome_do_arquivo, 'r',encoding='utf8') as arquivo:
+            querer = input("Deseja usar essas sugestões? (s/n): ").lower()
+            if querer == "s":
+                orcamento -= orcamento_total
+                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                    arquivo.write("\n====== Sugestão Escolhida: ======\n")
+                    arquivo.write(suges + "\n")
+                    print("evento cadastrado com sucesso!")
+            elif querer == "n":
+                pacote, valor = semSugestao(pacote)
+                print(pacote)
+                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                    diferenca = orcamento - valor
+                    if diferenca >= 0:
+                        print(f"\n====== Evento {pacote} Contratado ======\n")
+                        print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+                        arquivo.write(f"====== Evento {pacote} Contratado ======\n")
+                        arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
+                    else:
+                        print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
+                        arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
+        tarefas = input("\nDeseja adicionar mais tarefas ao evento? (s/n): ").lower()
+        if tarefas == "s":
+            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                while True:
+                    tarefa = input("\nDigite a tarefa (ou 'f' para finalizar): ")
+                    if tarefa.lower() == "f":
+                        break
+                    else:
+                        try:
+                            valorTarefa = float(input(f"Quanto {tarefa} irá custar? R$ "))
+                        except ValueError:
+                            print("Por favor, digite um valor numérico válido para o custo da tarefa.")
+                            continue
+                        orcamento -= valorTarefa
+                        if orcamento >= 0:
+                            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                                arquivo.write("Tarefa extra: " + tarefa + "\n")
+                        elif orcamento < 0:
+                            print(f"\nOrçamento insuficiente para adicionar a tarefa '{tarefa}'. Você precisa de mais R$ {abs(orcamento)}.")
+                            orcamento += valorTarefa
+                            continue
+            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                arquivo.write(f"Orçamento restante após tarefas extras: R$ {orcamento}\n")
+            print(f"\nTarefas adicionadas com sucesso! (Orçamento restante R$ {orcamento:.2f})")
+            print(f"\nEvento {nomeArquivo} adicionado com sucesso!")
+## Visualizar um evento ##
+    elif operacao == 2:
+        nome_do_arquivo = input("Qual arquivo vc quer visualizar (sem espaços): ") + ".txt"
+        try:
+            with open(nome_do_arquivo,'r',encoding='utf8') as arquivo:
+                tipo = arquivo.readline().strip()
+                data = arquivo.readline().strip()
+                local = arquivo.readline().strip()
+                convidados = arquivo.readline().strip()
+                orcamento = arquivo.readline().strip()
+
+                print(f"Tipo de Evento: {tipo}")
+                print(f"Data do Evento: {data}")
+                print(f"Local do Evento: {local}")
+                print(f"Número de Convidados: {convidados}")
+                print(f"Orçamento do Evento: {orcamento}")
+
+                ## calculando dias restantes ##
+                if ": " in data:
+                    _, data_str = data.split(": ", 1)
+                else:
+                    data_str = data
+                dia,mes,ano = map(int, data_str.split("/"))
+                from datetime import date
+                dia_do_evento = date(ano,mes,dia)
+                hoje = date.today()
+                restam = (dia_do_evento - hoje).days
+
+                if restam > 0:
+                    print(f"Faltam {restam} dias para o evento")
+                elif restam == 0:
+                    print(f"O evento é Hoje")
+                else:
+                    print(f"O evento ja passou há {-restam} dias")
+        except FileNotFoundError:
+            print("arquivo não encontrado.")
+        except Exception as e:
+            print("Erro ao visualizar o arquivo:", e)
+
+## Editar um evento ##
+    elif operacao == 3:
+        try:
+            nomeArquivo = input("Qual arquivo vc quer editar (sem espaços): ") + ".txt"
+            with open(nomeArquivo, 'r',encoding='utf-8') as arquivo:
                 linhas = arquivo.readlines()
-        
-        tipo_atual = linhas[0].split(": ",1)[1].strip()
-        data_atual = linhas[1].split(": ",1)[1].strip()
-        local_atual = linhas[2].split(": ",1)[1].strip()
-        orc_atual = linhas[3].split(": ",1)[1].strip()
-    
-        print("\n=-=-=-= Evento Atual =-=-=-=")
-        print(f"Tipo: {tipo_atual}")
-        print(f"Data: {data_atual}")
-        print(f"Local: {local_atual}")
-        print(f"Orçamento: {orc_atual}")
-        print("=-" * 15)
+            print("\n====== Evento Atual ======")
+            print(f"Tipo: {linhas[0].strip()}")
+            print(f"Data: {linhas[1].strip()}")
+            print(f"Local: {linhas[2].strip()}")
+            print(f"Orçamento: {linhas[3].strip()}")
+            print("=-" * 15)
 
 
-        print("=-=-=-= Evento Novo =-=-=-=")
-        print("Aperte Enter para manter antigo")
+            print("====== Evento Novo ======")
+            print("Aperte Enter para manter o antigo")
+            tipo_edit = input("Digite o novo tipo do Evento: ")
+            data_edit = input("Digite a nova data do Evento: ")
+            local_edit = input("Digte o novo local do Evento: ")
+            orcamento_edit = input("Digite o novo orçamento do Evento: ")
+            print("=-" * 15)
 
-        tipo_edit = input("Digite o novo tipo do Evento: ").strip()
-        data_edit = input("Digite a nova data do Evento: ").strip()
-        local_edit = input("Digte o novo local do Evento: ").strip()
-        orcamento_edit = input("Digite o novo orçamento do Evento: ").strip()
-        print("=-" * 15)
+            if tipo_edit != "":
+                linhas[0] = tipo_edit + "\n"
+            if data_edit != "":
+                linhas[1] = data_edit + "\n"
+            if local_edit != "":
+                linhas[2] = local_edit + "\n"
+            if orcamento_edit != "":
+                linhas[3] = orcamento_edit + "\n"
 
-        if tipo_edit != "":
-            linhas[0] = f"1- Tipo do Evento: {tipo_edit}\n"
+            with open(nomeArquivo,'w',encoding='utf-8') as arquivo:
+                arquivo.writelines(linhas)
+            print("\nArquivo editado com sucesso!")
+        except FileNotFoundError:
+            print("\nArquivo não encontrado")
+        except Exception as e:
+            print("\nErro ao editar o arquivo:", e)
+## Excluir um evento ##
+    elif operacao == 4:
+        try:
+            nomeArquivo = input("Digite o nome do arquivo que deseja apagar(sem espaços): ") + ".txt"
+            os.remove(nomeArquivo)
+            print("\nArquivo excluido com sucesso!")
+        except FileNotFoundError:
+            print("\nO arquivo não existe!")
+        except Exception as e:
+            print("\nErro ao excluir o arquivo:", e)
 
-        if data_edit != "":
-            linhas[1] = f"2- Data do Evento: {data_edit}\n"
-
-        if local_edit != "":
-            linhas[2] = f"3- Local do Evento: {local_edit}\n"
-
-        if orcamento_edit != "":
-            linhas[3] = f"4- Orçamento do Evento: {orcamento_edit}\n"
-
-        with open(nome_do_arquivo,'w',encoding='utf8') as arquivo:
-            arquivo.writelines(linhas)
-        print("Arquivo editado com sucesso")
-    
-    except FileNotFoundError:
-        print("Arquivo não encontrado")
-    
-
-elif opc == 4:
-    try:
-        nome_do_arquivo = input("Digite o nome do arquivo que deseja apagar: ")
-        os.remove(nome_do_arquivo)
-        print("Arquivo excluido com sucesso!")
-    except FileNotFoundError:
-        print("O arquivo não existe")
-
-
-elif opc == 5:
-    nome_de_arquivo = input("Informe o nome da festa que voce quer adicionar um item: ")
-    try:
-        with open(nome_de_arquivo, 'r',encoding='utf8') as arquivo:
-            linhas = arquivo.readlines()
-        
-        valor_restante = float(linhas[5].split(": ",1)[1].strip())
-        orcamento_atual = float(valor_restante)
-        indice_orcamento = 5
-
-        item = input("Digite o nome do item: ")
-        valor = float(input("Digite o custo do item: "))
-
-        novo_orcamento = orcamento_atual - valor
-        linhas[indice_orcamento] = f"4- Orcamento do Evento: {novo_orcamento}\n"
-
-        linhas.append(f"{item}: R$ {valor}\n")
-
-        with open(nome_de_arquivo, "w",encoding='utf8') as arquivo:
-            arquivo.writelines(linhas)
-
-        print(f"Item {item} adicionado com sucesso! Novo orcamento: R${novo_orcamento:.2f}")
-
-    except FileNotFoundError:
-        print("Nao foi possivel encontrar o arquivo.")
-    
+    elif operacao == 0:
+        print("Saindo do programa...")
+        break
+## Operação inválida ## 
+    else:
+        print("Operação inválida. Tente novamente.")
+        continue
