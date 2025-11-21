@@ -267,7 +267,8 @@ while True:
             print(f"Tipo: {linhas[0].strip()}")
             print(f"Data: {linhas[1].strip()}")
             print(f"Local: {linhas[2].strip()}")
-            print(f"Orçamento: {linhas[3].strip()}")
+            print(f"Local: {linhas[3].strip()}")
+            print(f"Orçamento: {linhas[4].strip()}")
             print("=-" * 15)
 
 
@@ -276,15 +277,22 @@ while True:
             tipo_edit = input("Digite o novo tipo do Evento: ")
             data_edit = input("Digite a nova data do Evento: ")
             local_edit = input("Digte o novo local do Evento: ")
+            convidado_edit = input("Digte a nova quantidade de convidados: ")
             orcamento_edit = input("Digite o novo orçamento do Evento: ")
             print("=-" * 15)
 
             if tipo_edit != "":
                 linhas[0] = tipo_edit + "\n"
+
             if data_edit != "":
                 linhas[1] = data_edit + "\n"
+
             if local_edit != "":
                 linhas[2] = local_edit + "\n"
+
+            if convidado_edit != "":
+                linhas[3] = convidado_edit + "\n"
+
             if orcamento_edit != "":
                 linhas[3] = orcamento_edit + "\n"
 
