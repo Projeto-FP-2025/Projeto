@@ -108,6 +108,7 @@ while True:
     print("[2] - Visualizar um evento")
     print("[3] - Editar um evento")
     print("[4] - Excluir evento")
+    print("[5] - adicionar lista de convidados")
     print("[0] - Sair")
     print("=" * 40)
     try:
@@ -116,21 +117,29 @@ while True:
         print("Por favor, digite um número válido.")
         continue
     print("=" * 40)
-## Adicionar novo evento ##
+    ## Adicionar novo evento ##
     if operacao == 1:
+        validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
+        print("Segue a lista de eventos com sugestões pré definidas:")
+        for item in (validos):
+            print(f"{item}")
         nomeArquivo = input("Digite o nome do evento(sem espaços): ") + ".txt"
         ## coletando dados do evento ##
         with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
             tipo = input("Digite o tipo do evento: ").lower()
             arquivo.write("Tipo do evento: " + tipo + "\n")
+
             data = input("Digite a data do evento (DD/MM/AAAA): ") 
             arquivo.write("Data do evento: " + data + "\n")
+
             local = input("Digite o local do evento: ")
             arquivo.write("Local do evento: " + local + "\n")
+
             convidados = int(input("Digite o número de convidados: "))
             arquivo.write("Número de convidados: " + str(convidados) + "\n")
+
             orcamento = input("Digite o orçamento do evento: R$ ")
-            arquivo.write("Orçamento inicial do evento: R$ " + orcamento + "\n")
+            arquivo.write("Orçamento do Evento: R$ " + orcamento + "\n")
             try:
                 orcamento = float(orcamento)
             except ValueError:
@@ -142,30 +151,36 @@ while True:
                 continue
         ## sugerindo pacotes ##
         validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
+
         if tipo.lower() not in validos:
             pacote, valor = semSugestao()
             print(pacote)
+
             with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                 diferenca = orcamento - valor
+
                 if diferenca >= 0:
                     print(f"\n====== Evento {pacote} Contratado ======n")
                     print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+
                     arquivo.write(f"====== Evento {pacote} Contratado ======\n")
                     arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
                 else:
                     print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
                     arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
                     continue
-            ## sugerindo detalhes do evento ##
+        ## sugerindo detalhes do evento ##
         else:
             suges, orcamento_total = sugestao(tipo, convidados)
             print(suges)
+
             if orcamento > orcamento_total:
                 with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
-                    print(f"\nOrçamento final: R$ {orcamento_total}")
-                    arquivo.write(f"Orçamento final: R$ {orcamento_total}\n")
+                    print(f"\nOrçamento Total do Evento: R$ {orcamento_total}")
+                    arquivo.write(f"Orçamento Total do Evento: R$ {orcamento_total}\n")
+
                     valor_final = orcamento - orcamento_total
-                    print(f"Você terá um saldo restante de R$ {valor_final} após contratar os serviços sugeridos.")
+                    print(f"Saldo restante após contratar os serviços sugeridos: R$ {valor_final}.")
                     arquivo.write(f"Saldo restante após contratar os serviços sugeridos: R$ {valor_final}\n")
             else:
                 falta = orcamento_total - orcamento
@@ -176,25 +191,36 @@ while True:
             querer = input("Deseja usar essas sugestões? (s/n): ").lower()
             if querer == "s":
                 orcamento -= orcamento_total
+
                 with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                     arquivo.write("\n====== Sugestão Escolhida: ======\n")
                     arquivo.write(suges + "\n")
+
                     print("evento cadastrado com sucesso!")
+
             elif querer == "n":
-                pacote, valor = semSugestao(pacote)
+                pacote, valor = semSugestao()
                 print(pacote)
+
                 with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                     diferenca = orcamento - valor
+
                     if diferenca >= 0:
                         print(f"\n====== Evento {pacote} Contratado ======\n")
                         print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+
                         arquivo.write(f"====== Evento {pacote} Contratado ======\n")
                         arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
+                        orcamento = diferenca
                     else:
                         print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
                         arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
+                        continue
+
+        ## adicionando tarefas extras ##
         tarefas = input("\nDeseja adicionar mais tarefas ao evento? (s/n): ").lower()
-        if tarefas == "s":
+
+        if tarefas == "s" or tarefas == "sim":
             with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                 while True:
                     tarefa = input("\nDigite a tarefa (ou 'f' para finalizar): ")
@@ -203,24 +229,32 @@ while True:
                     else:
                         try:
                             valorTarefa = float(input(f"Quanto {tarefa} irá custar? R$ "))
+
                         except ValueError:
                             print("Por favor, digite um valor numérico válido para o custo da tarefa.")
                             continue
+
                         orcamento -= valorTarefa
+
                         if orcamento >= 0:
                             with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                                 arquivo.write("Tarefa extra: " + tarefa + "\n")
+
                         elif orcamento < 0:
                             print(f"\nOrçamento insuficiente para adicionar a tarefa '{tarefa}'. Você precisa de mais R$ {abs(orcamento)}.")
                             orcamento += valorTarefa
                             continue
+
             with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                 arquivo.write(f"Orçamento restante após tarefas extras: R$ {orcamento}\n")
+
             print(f"\nTarefas adicionadas com sucesso! (Orçamento restante R$ {orcamento:.2f})")
             print(f"\nEvento {nomeArquivo} adicionado com sucesso!")
-## Visualizar um evento ##
+
+    ## Visualizar um evento ##
     elif operacao == 2:
         nome_do_arquivo = input("Qual arquivo vc quer visualizar (sem espaços): ") + ".txt"
+
         try:
             with open(nome_do_arquivo,'r',encoding='utf8') as arquivo:
                 tipo = arquivo.readline().strip()
@@ -229,95 +263,176 @@ while True:
                 convidados = arquivo.readline().strip()
                 orcamento = arquivo.readline().strip()
 
-                print(f"Tipo de Evento: {tipo}")
-                print(f"Data do Evento: {data}")
-                print(f"Local do Evento: {local}")
-                print(f"Número de Convidados: {convidados}")
-                print(f"Orçamento do Evento: {orcamento}")
+                print(f"{tipo}")
+                print(f"{data}")
+                print(f"{local}")
+                print(f"{convidados}")
+                print(f"{orcamento}")
 
                 ## calculando dias restantes ##
                 if ": " in data:
                     _, data_str = data.split(": ", 1)
+
                 else:
                     data_str = data
                 dia,mes,ano = map(int, data_str.split("/"))
+
                 from datetime import date
+
                 dia_do_evento = date(ano,mes,dia)
                 hoje = date.today()
                 restam = (dia_do_evento - hoje).days
 
                 if restam > 0:
                     print(f"Faltam {restam} dias para o evento")
+
                 elif restam == 0:
                     print(f"O evento é Hoje")
+
                 else:
                     print(f"O evento ja passou há {-restam} dias")
+
         except FileNotFoundError:
             print("arquivo não encontrado.")
+
         except Exception as e:
             print("Erro ao visualizar o arquivo:", e)
 
-## Editar um evento ##
+    ## Editar um evento ##
     elif operacao == 3:
         try:
             nomeArquivo = input("Qual arquivo vc quer editar (sem espaços): ") + ".txt"
             with open(nomeArquivo, 'r',encoding='utf-8') as arquivo:
                 linhas = arquivo.readlines()
+
             print("\n====== Evento Atual ======")
-            print(f"Tipo: {linhas[0].strip()}")
-            print(f"Data: {linhas[1].strip()}")
-            print(f"Local: {linhas[2].strip()}")
-            print(f"Local: {linhas[3].strip()}")
-            print(f"Orçamento: {linhas[4].strip()}")
+            for x in range(5):
+                print(linhas[x].strip())
             print("=-" * 15)
 
 
             print("====== Evento Novo ======")
             print("Aperte Enter para manter o antigo")
-            tipo_edit = input("Digite o novo tipo do Evento: ")
             data_edit = input("Digite a nova data do Evento: ")
             local_edit = input("Digte o novo local do Evento: ")
             convidado_edit = input("Digte a nova quantidade de convidados: ")
             orcamento_edit = input("Digite o novo orçamento do Evento: ")
             print("=-" * 15)
 
-            if tipo_edit != "":
-                linhas[0] = tipo_edit + "\n"
+            str_orc = linhas[4].split(":")[1].strip()
+            str_orc = str_orc.replace("R$", "").strip()
+            orcamento_velho = float(str_orc)
+
+            saldo_velho = None
+            
+            for linha in linhas:
+                if "saldo restante" in linha.lower():
+                    str_saldo = linha.split(":")[1].strip()
+                    str_saldo = str_saldo.replace("R$", "").strip()
+                    saldo_velho = float(str_saldo)
+            
+            if saldo_velho is None:
+                saldo_velho = 0.0
+
+            orcamento_total = orcamento_velho - saldo_velho
+
 
             if data_edit != "":
-                linhas[1] = data_edit + "\n"
+                linhas[1] =  "Data do Evento: " + data_edit + "\n"
 
             if local_edit != "":
-                linhas[2] = local_edit + "\n"
+                linhas[2] =  "Local do Evento: " + local_edit + "\n"
 
             if convidado_edit != "":
-                linhas[3] = convidado_edit + "\n"
+                linhas[3] =  "Número de Convidados: " + convidado_edit + "\n"
 
             if orcamento_edit != "":
-                linhas[3] = orcamento_edit + "\n"
+                novo_orcamento  = float(orcamento_edit)
+
+                saldo_novo = novo_orcamento - orcamento_total
+
+                linhas[4] = f"Orçamento do Evento: {novo_orcamento}\n"
+
+                linhas = [l for l in linhas if "saldo restante" not in l.lower()]
+
+                linhas.append(f"Saldo Restante {saldo_novo}")
+
 
             with open(nomeArquivo,'w',encoding='utf-8') as arquivo:
                 arquivo.writelines(linhas)
+
             print("\nArquivo editado com sucesso!")
+
         except FileNotFoundError:
             print("\nArquivo não encontrado")
+
         except Exception as e:
             print("\nErro ao editar o arquivo:", e)
-## Excluir um evento ##
+
+    ## Excluir um evento ##
     elif operacao == 4:
         try:
             nomeArquivo = input("Digite o nome do arquivo que deseja apagar(sem espaços): ") + ".txt"
             os.remove(nomeArquivo)
             print("\nArquivo excluido com sucesso!")
+
         except FileNotFoundError:
             print("\nO arquivo não existe!")
+
         except Exception as e:
             print("\nErro ao excluir o arquivo:", e)
+    ## Adicionar lista de convidados ##
+    elif operacao == 5:
+        listaConvidados = []
+        nomeArquivo = input("Em qual evento você gostaria de adicionar a lista de convidados? (sem espaços): ") + ".txt"
 
+        try:
+            with open (nomeArquivo, "r", encoding = "utf-8") as c:
+                linhas = c.readlines()
+
+            numero = None
+            for l in linhas:
+                if "Número de convidados" in l:
+
+                    try:
+                        numero = int(l.split(":")[-1].strip())
+
+                    except Exception:
+                        numero = None
+                    break
+
+            if numero is None:
+                try:
+                    numero = int(input("Quantos convidados você quer adicionar? ").strip())
+
+                except ValueError:
+                    print("Número inválido. Operação cancelada.")
+                    continue
+
+        except FileNotFoundError:
+                print("Arquivo não encontrado.")
+                continue
+        
+        for i in range(numero):
+            convidadoNome = input(f"insira o nome do convidado {i+1}:  ".strip())
+            listaConvidados.append(convidadoNome)
+        listaConvidados.sort()
+
+        try:
+            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                arquivo.write("\nLista de convidados:\n")
+                arquivo.writelines([f"{nome}\n" for nome in listaConvidados])
+                print("Lista de convidados adicionada com sucesso!")
+
+        except Exception as e:
+            print("Erro ao escrever no arquivo:", e)
+
+    ## saindo do programa ##
     elif operacao == 0:
         print("Saindo do programa...")
         break
-## Operação inválida ## 
+
+    ## Operação inválida ## 
     else:
         print("Operação inválida. Tente novamente.")
         continue
