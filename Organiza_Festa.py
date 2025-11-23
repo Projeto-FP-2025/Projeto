@@ -96,6 +96,13 @@ def semSugestao():
         return "Pacote VIP (R$ 10000)", 10000
     else:
         return "Pacote inválido. Por favor, escolha uma opção válida.", 0
+
+def indice(linhas, chave):
+    for i, linha in enumerate(linhas):
+        if linha.lower().startswith(chave.lower()):
+            return i
+    return None
+
 ## importando bibliotecas ##
 import os
 from datetime import datetime
@@ -123,7 +130,7 @@ while True:
         print("Segue a lista de eventos com sugestões pré definidas:")
         for item in (validos):
             print(f"{item}")
-        nomeArquivo = input("Digite o nome do evento(sem espaços): ") + ".txt"
+        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
         ## coletando dados do evento ##
         with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
             tipo = input("Digite o tipo do evento: ").lower()
@@ -299,63 +306,61 @@ while True:
             print("Erro ao visualizar o arquivo:", e)
 
     ## Editar um evento ##
+
     elif operacao == 3:
         try:
             nomeArquivo = input("Qual arquivo vc quer editar (sem espaços): ") + ".txt"
             with open(nomeArquivo, 'r',encoding='utf-8') as arquivo:
                 linhas = arquivo.readlines()
 
+            data_indice = indice(linhas, "Data do Evento")
+            local_indice = indice(linhas, "Local do Evento")
+            convidado_indice = indice(linhas, "Número de Convidados")
+            orcamento_indice = indice(linhas, "Orçamento do Evento")
+
             print("\n====== Evento Atual ======")
-            for x in range(5):
-                print(linhas[x].strip())
-            print("=-" * 15)
+            for i in [data_indice, local_indice, convidado_indice, orcamento_indice]:
+                if i is not None:
+                    print(linhas[i].strip())
 
 
-            print("====== Evento Novo ======")
+            print("\n====== Evento Novo ======")
             print("Aperte Enter para manter o antigo")
-            data_edit = input("Digite a nova data do Evento: ")
-            local_edit = input("Digte o novo local do Evento: ")
-            convidado_edit = input("Digte a nova quantidade de convidados: ")
-            orcamento_edit = input("Digite o novo orçamento do Evento: ")
+
+            data_nova = input("Digite a NOVA data do Evento: ")
+            local_novo = input("Digte o NOVO local do Evento: ")
+            convidado_novo = input("Digte a NOVA quantidade de convidados: ")
+            orcamento_novo = input("Digite o NOVO orçamento do Evento: ")
             print("=-" * 15)
 
-            str_orc = linhas[4].split(":")[1].strip()
-            str_orc = str_orc.replace("R$", "").strip()
-            orcamento_velho = float(str_orc)
-
-            saldo_velho = None
+            if data_nova and data_indice is not None:
+                linhas[data_indice] = f"Data do Evento: {data_nova}\n"
             
-            for linha in linhas:
-                if "saldo restante" in linha.lower():
-                    str_saldo = linha.split(":")[1].strip()
-                    str_saldo = str_saldo.replace("R$", "").strip()
-                    saldo_velho = float(str_saldo)
+            if local_novo and local_indice is not None:
+                linhas[local_indice] = f"Local do Evento: {local_novo}\n"
             
-            if saldo_velho is None:
-                saldo_velho = 0.0
+            if convidado_novo and convidado_indice is not None:
+                linhas[convidado_indice] = f"Número de Convidados: {convidado_novo}\n"
 
-            orcamento_total = orcamento_velho - saldo_velho
+            if orcamento_novo and orcamento_indice is not None:
+                orcamento_novo = float(orcamento_novo)
 
+                orcamento_antigo_str = linhas[orcamento_indice].split(":")[1].replace("R$", "").strip()
+                orcamento_antigo = float(orcamento_antigo_str)
 
-            if data_edit != "":
-                linhas[1] =  "Data do Evento: " + data_edit + "\n"
+                saldo_antigo = 0.0
+                for l in linhas:
+                    if "saldo restante" in l.lower():
+                        saldo_antigo = float(l.split(":")[1].replace("R$", "").strip())
+                
+                orcamento_total = orcamento_antigo - saldo_antigo
+                saldo_novo = orcamento_novo - orcamento_total
 
-            if local_edit != "":
-                linhas[2] =  "Local do Evento: " + local_edit + "\n"
-
-            if convidado_edit != "":
-                linhas[3] =  "Número de Convidados: " + convidado_edit + "\n"
-
-            if orcamento_edit != "":
-                novo_orcamento  = float(orcamento_edit)
-
-                saldo_novo = novo_orcamento - orcamento_total
-
-                linhas[4] = f"Orçamento do Evento: {novo_orcamento}\n"
+                linhas[orcamento_indice] = f"Orçamento do Evento: R$ {orcamento_novo}\n"
 
                 linhas = [l for l in linhas if "saldo restante" not in l.lower()]
 
-                linhas.append(f"Saldo Restante {saldo_novo}")
+                linhas.append(f"Saldo Restante: R$ {saldo_novo}\n")
 
 
             with open(nomeArquivo,'w',encoding='utf-8') as arquivo:
