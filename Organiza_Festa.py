@@ -126,11 +126,14 @@ while True:
     print("=" * 40)
     ## Adicionar novo evento ##
     if operacao == 1:
-        validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
+
+        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
+        
+        validos = ["- casamento", "- aniversário", "- reunião", "- churrasco", "- batizado", "- formatura"]
         print("Segue a lista de eventos com sugestões pré definidas:")
         for item in (validos):
             print(f"{item}")
-        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
+            
         ## coletando dados do evento ##
         with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
             tipo = input("Digite o tipo do evento: ").lower()
