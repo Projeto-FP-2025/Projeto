@@ -108,6 +108,7 @@ import os
 from datetime import datetime
 ## menu de operações ##
 while True:
+
     print("=" * 40)
     print("\tOrganiza Festa\t")
     print("=" * 40)
@@ -118,6 +119,7 @@ while True:
     print("[5] - adicionar lista de convidados")
     print("[0] - Sair")
     print("=" * 40)
+
     try:
         operacao = int(input("Escolha a operação a ser realizada: "))
     except ValueError:
@@ -125,12 +127,16 @@ while True:
         continue
     print("=" * 40)
     ## Adicionar novo evento ##
+
     if operacao == 1:
-        validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
+
+        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
+        
+        validos = ["- casamento", "- aniversário", "- reunião", "- churrasco", "- batizado", "- formatura"]
         print("Segue a lista de eventos com sugestões pré definidas:")
         for item in (validos):
             print(f"{item}")
-        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
+
         ## coletando dados do evento ##
         with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
             tipo = input("Digite o tipo do evento: ").lower()
@@ -152,10 +158,12 @@ while True:
             except ValueError:
                 print("Por favor, digite um valor numérico válido para o orçamento.")
                 continue
+
             ## verificando orçamento mínimo ##
             if orcamento < 1000:
                 print("\nO valor mínimo para contratar um evento é de R$1000")
                 continue
+
         ## sugerindo pacotes ##
         validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
 
@@ -219,6 +227,7 @@ while True:
                         arquivo.write(f"====== Evento {pacote} Contratado ======\n")
                         arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
                         orcamento = diferenca
+
                     else:
                         print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
                         arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
@@ -230,9 +239,11 @@ while True:
         if tarefas == "s" or tarefas == "sim":
             with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
                 while True:
+
                     tarefa = input("\nDigite a tarefa (ou 'f' para finalizar): ")
                     if tarefa.lower() == "f":
                         break
+                    
                     else:
                         try:
                             valorTarefa = float(input(f"Quanto {tarefa} irá custar? R$ "))
