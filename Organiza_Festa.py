@@ -109,7 +109,7 @@ while True:
 
     if operacao == 1:
         while True:
-            nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
+            nomeArquivo = input("Digite o nome do arquivo: ").replace(" ","") + ".txt"
 
             if os.path.exists(nomeArquivo):
                 print(f"Arquivo '{nomeArquivo}' ja existe! Tente outro nome.")
@@ -133,11 +133,16 @@ while True:
             local = input("Digite o local do evento: ")
             arquivo.write("Local do evento: " + local + "\n")
 
-            convidados = int(input("Digite o número de convidados: "))
-            arquivo.write("Número de convidados: " + str(convidados) + "\n")
+            try:
+                convidados = int(input("Digite o número de convidados: "))
+                arquivo.write("Número de convidados: " + str(convidados) + "\n")
+            
+            except ValueError:
+                print("Coloque números válidos (0-9)")
 
             orcamento = input("Digite o orçamento do evento: R$ ")
             arquivo.write("Orçamento do Evento: R$ " + orcamento + "\n")
+            
             try:
                 orcamento = float(orcamento)
             except ValueError:
@@ -175,21 +180,20 @@ while True:
                     arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
             else:
                 print(f"\nSeu orçamento não cobre o pacote {pacote}. Faltam R$ {abs(diferenca)}.")
-                continue
 
         ## sugerindo detalhes do evento ##
         else:
             suges, orcamento_total = sugestao(tipo, convidados)
             print(suges)
 
-            if orcamento > orcamento_total:
-                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
-                    print(f"\nOrçamento Total do Evento: R$ {orcamento_total}")
-                    arquivo.write(f"Orçamento Total do Evento: R$ {orcamento_total}\n")
+            if orcamento >= orcamento_total:
+                valor_final = orcamento - orcamento_total
+                print(f"Saldo restante após a contratação do evento: R$ {valor_final}")
 
-                    valor_final = orcamento - orcamento_total
-                    print(f"Saldo restante após contratar os serviços sugeridos: R$ {valor_final}.")
-                    arquivo.write(f"Saldo restante após contratar os serviços sugeridos: R$ {valor_final}\n")
+                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
+                    arquivo.write(f"Orçamento Total do Evento: R$ {orcamento_total}\n")
+                    arquivo.write(f"Saldo restante após a contratação do evento: R$ {valor_final}\n")
+
             else:
                 falta = orcamento_total - orcamento
                 print(f"\nSeu orçamento não cobre todas as sugestões. Faltam R$ {falta} para contratar todos os serviços sugeridos.")
@@ -269,7 +273,7 @@ while True:
 
     ## Visualizar um evento ##
     elif operacao == 2:
-        nome_do_arquivo = input("Qual arquivo vc quer visualizar (sem espaços): ") + ".txt"
+        nome_do_arquivo = input("Qual arquivo vc quer visualizar: ").replace(" ","") + ".txt"
 
         try:
             with open(nome_do_arquivo,'r',encoding='utf8') as arquivo:
@@ -318,7 +322,7 @@ while True:
 
     elif operacao == 3:
         try:
-            nomeArquivo = input("Qual arquivo vc quer editar (sem espaços): ") + ".txt"
+            nomeArquivo = input("Qual arquivo vc quer editar: ").replace(" ","") + ".txt"
             with open(nomeArquivo, 'r',encoding='utf-8') as arquivo:
                 linhas = arquivo.readlines()
 
@@ -363,6 +367,13 @@ while True:
                         saldo_antigo = float(l.split(":")[1].replace("R$", "").strip())
                 
                 orcamento_total = orcamento_antigo - saldo_antigo
+
+                if orcamento_novo <orcamento_total:
+                    falta = orcamento_total - orcamento_novo
+                    print(f"\nOrçamento insuficiente! vc precisa de mais R$ {falta} para cobrir os custos totais do evento")
+                    print("A edição não foi salva")
+                    continue
+
                 saldo_novo = orcamento_novo - orcamento_total
 
                 linhas[orcamento_indice] = f"Orçamento do Evento: R$ {orcamento_novo}\n"
@@ -386,7 +397,7 @@ while True:
     ## Excluir um evento ##
     elif operacao == 4:
         try:
-            nomeArquivo = input("Digite o nome do arquivo que deseja apagar(sem espaços): ") + ".txt"
+            nomeArquivo = input("Digite o nome do arquivo que deseja apagar: ").replace(" ","") + ".txt"
             os.remove(nomeArquivo)
             print("\nArquivo excluido com sucesso!")
 
@@ -398,7 +409,7 @@ while True:
     ## Adicionar lista de convidados ##
     elif operacao == 5:
         listaConvidados = []
-        nomeArquivo = input("Em qual evento você gostaria de adicionar a lista de convidados? (sem espaços): ") + ".txt"
+        nomeArquivo = input("Em qual evento você gostaria de adicionar a lista de convidados?: ").replace(" ","") + ".txt"
 
         try:
             with open (nomeArquivo, "r", encoding = "utf-8") as c:
