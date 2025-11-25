@@ -75,27 +75,6 @@ def sugestao(tipoEvento, convidados):
         sugestoes += "\nMÚSICA: Banda ao vivo e DJ (R$1500)"
         orcamento_total += 1500
         return sugestoes, orcamento_total
-## Função para escolher pacote sem sugestão ##    
-def semSugestao():
-    print("Escolha o Pacote:")
-    print("[1] Pacote Básico (R$ 1000)")
-    print("[2] Pacote Completo (R$ 5000)")
-    print("[3] Pacote VIP (R$ 10000)")
-    try:
-        pacote = int(input("Digite o número do pacote desejado: "))
-    except ValueError:
-        print("Por favor, digite um número válido.")
-        return "Pacote inválido. Por favor, escolha uma opção válida.", 0
-    if pacote == 1:
-        return "Pacote Básico (R$ 1000)", 1000
-    
-    elif pacote == 2:
-        return "Pacote Completo (R$ 5000)", 5000
-    
-    elif pacote == 3:
-        return "Pacote VIP (R$ 10000)", 10000
-    else:
-        return "Pacote inválido. Por favor, escolha uma opção válida.", 0
 
 def indice(linhas, chave):
     for i, linha in enumerate(linhas):
@@ -129,12 +108,18 @@ while True:
     ## Adicionar novo evento ##
 
     if operacao == 1:
+        while True:
+            nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
 
-        nomeArquivo = input("Digite o nome do arquivo(sem espaços): ") + ".txt"
-        
-        validos = ["- casamento", "- aniversário", "- reunião", "- churrasco", "- batizado", "- formatura"]
+            if os.path.exists(nomeArquivo):
+                print(f"Arquivo '{nomeArquivo}' ja existe! Tente outro nome.")
+            
+            else:
+                break
+            
+        validos_tela = ["- casamento", "- aniversário", "- reunião", "- churrasco", "- batizado", "- formatura"]
         print("Segue a lista de eventos com sugestões pré definidas:")
-        for item in (validos):
+        for item in validos_tela:
             print(f"{item}")
 
         ## coletando dados do evento ##
@@ -168,22 +153,30 @@ while True:
         validos = ["casamento", "aniversário", "reunião", "churrasco", "batizado", "formatura"]
 
         if tipo.lower() not in validos:
-            pacote, valor = semSugestao()
-            print(pacote)
+            
+            pacote = input("Digite o nome do pacote: ")
+            while True:
+                try:
+                    valor = float(input(f"Digite o valor do pacote {pacote}: R$ "))
+                    break
 
-            with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
-                diferenca = orcamento - valor
+                except ValueError:
+                    print("Por favor, digite um valor numérico válido para o pacote.")
 
-                if diferenca >= 0:
-                    print(f"\n====== Evento {pacote} Contratado ======n")
-                    print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+            diferenca = orcamento - valor
+            orcamento = diferenca  
 
+            if diferenca >= 0:
+                print(f"\n====== Evento {pacote} Contratado ======")
+                print(f"Você terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+
+                with open(nomeArquivo, "a", encoding="utf-8") as arquivo:
                     arquivo.write(f"====== Evento {pacote} Contratado ======\n")
                     arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
-                else:
-                    print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
-                    arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
-                    continue
+            else:
+                print(f"\nSeu orçamento não cobre o pacote {pacote}. Faltam R$ {abs(diferenca)}.")
+                continue
+
         ## sugerindo detalhes do evento ##
         else:
             suges, orcamento_total = sugestao(tipo, convidados)
@@ -214,24 +207,29 @@ while True:
                     print("evento cadastrado com sucesso!")
 
             elif querer == "n":
-                pacote, valor = semSugestao()
-                print(pacote)
+                
+                pacote = input("Digite o nome do pacote que deseja contratar: ")
+                while True:
+                    try:
+                        valor = float(input(f"Digite o valor do pacote {pacote}: R$ "))
+                        break
+                    except ValueError:
+                        print("Por favor, digite um valor numérico válido para o pacote.")
 
-                with open(nomeArquivo, "a", encoding = "utf-8") as arquivo:
-                    diferenca = orcamento - valor
+                diferenca = orcamento - valor
 
-                    if diferenca >= 0:
-                        print(f"\n====== Evento {pacote} Contratado ======\n")
-                        print(f"\nVocê terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
-
-                        arquivo.write(f"====== Evento {pacote} Contratado ======\n")
-                        arquivo.write(f"Saldo restante após contratar o pacote escolhido: R$ {diferenca}\n")
-                        orcamento = diferenca
-
-                    else:
-                        print(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.")
-                        arquivo.write(f"\nSeu orçamento não cobre o {pacote}. Faltam R$ {abs(diferenca)} para contratar esse pacote.\n")
-                        continue
+                if diferenca >= 0:
+                    print(f"\n====== Evento {pacote} Contratado ======")
+                    print(f"Vc terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+                    
+                    with open(nomeArquivo,'a',encoding='utf-8') as arquivo:
+                        arquivo.write(f"\n====== Evento {pacote} Contratado ======")
+                        arquivo.write(f"Vc terá um saldo restante de R$ {diferenca} após contratar o pacote escolhido.")
+                else:
+                    print(f"\nSeu orçamento não cobre o pacote {pacote}. Faltam R$ {abs(diferenca)}")
+                    continue
+                    
+                orcamento = diferenca
 
         ## adicionando tarefas extras ##
         tarefas = input("\nDeseja adicionar mais tarefas ao evento? (s/n): ").lower()
@@ -369,7 +367,7 @@ while True:
 
                 linhas[orcamento_indice] = f"Orçamento do Evento: R$ {orcamento_novo}\n"
 
-                linhas = [l for l in linhas if "saldo restante" not in l.lower()]
+                linhas = [l for l in linhas if "saldo restante" not in l.lower() and "orçamento restante após tarefas extras" not in l.lower()]
 
                 linhas.append(f"Saldo Restante: R$ {saldo_novo}\n")
 
